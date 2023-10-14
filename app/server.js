@@ -1,5 +1,6 @@
 import express from 'express'
 import basicAuth from 'express-basic-auth'
+import nocache from 'nocache'
 import {
 	LOCAL_AUTH_USERNAME,
 	LOCAL_AUTH_PASSWORD
@@ -16,6 +17,7 @@ app.use(basicAuth({
 	challenge: true,
 	realm: 'simple-texe-alarm-ui'
 }))
+app.use(nocache())
 
 app.use('/static', express.static('./public/static'))
 app.use('/api', apiRouter)
