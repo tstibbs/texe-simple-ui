@@ -30,4 +30,6 @@ apiRouter.post('/fullArm', async (req, res) => {
 	res.json(response)
 })
 
-app.listen(3000)
+app.listen(3000, () => {
+	console.log(`Running...`)
+})

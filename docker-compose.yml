@@ -7,3 +7,10 @@ services:
     restart: unless-stopped
     ports:
       - "8080:3000"
+    environment:
+      - TEXE_USERNAME
+      - TEXE_PASSWORD
+      - TEXE_USER_CODE
+      - DUMMY_DATA
+      - TOKEN
+      - PANEL_ID
