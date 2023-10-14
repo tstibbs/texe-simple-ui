@@ -14,3 +14,5 @@ services:
       - DUMMY_DATA
       - TOKEN
       - PANEL_ID
+      - LOCAL_AUTH_USERNAME
+      - LOCAL_AUTH_PASSWORD

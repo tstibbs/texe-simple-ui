@@ -1,8 +1,21 @@
 import express from 'express'
+import basicAuth from 'express-basic-auth'
+import {
+	LOCAL_AUTH_USERNAME,
+	LOCAL_AUTH_PASSWORD
+} from './envs.js'
 import { getStatus, recentEvents, partArm, fullArm } from './backend-switcher.js'
 
 const apiRouter = express.Router()
 const app = express()
+
+app.use(basicAuth({
+	users: {
+		[LOCAL_AUTH_USERNAME]: LOCAL_AUTH_PASSWORD
+	},
+	challenge: true,
+	realm: 'simple-texe-alarm-ui'
+}))
 
 app.use('/static', express.static('./public/static'))
 app.use('/api', apiRouter)

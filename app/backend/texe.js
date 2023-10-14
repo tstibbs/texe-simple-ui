@@ -1,18 +1,15 @@
 import axios from 'axios'
-import 'dotenv/config'
-
-import { getStoredVal, storeVal } from '../store.js'
-
-const TOKEN_KEY = 'TOKEN_KEY_for_internal_store'
-const PANEL_ID_KEY = 'PANEL_ID_KEY_for_internal_store'
-
-const {
+import {
 	TEXE_USERNAME,
 	TEXE_PASSWORD,
 	TEXE_USER_CODE,
 	TOKEN,
 	PANEL_ID
-} = process.env
+} from '../envs.js'
+import { getStoredVal, storeVal } from '../store.js'
+
+const TOKEN_KEY = 'TOKEN_KEY_for_internal_store'
+const PANEL_ID_KEY = 'PANEL_ID_KEY_for_internal_store'
 
 storeVal(TOKEN_KEY, TOKEN)
 storeVal(PANEL_ID_KEY, PANEL_ID)
