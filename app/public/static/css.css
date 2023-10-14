@@ -1,0 +1,48 @@
+#states {
+	display: flex;
+	flex-direction: row;
+	align-items: centre;
+	visibility: hidden;
+}
+#states.show {
+	visibility: initial;
+}
+
+#states > button {
+	height: 80px;
+	width: 80px;
+	border-width: 5px;
+	border-style: solid;
+	margin: 6px;
+	text-align: center;
+	vertical-align: middle;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: sans-serif;
+	color: black;
+}
+#states > button.selected {
+	color: white;
+}
+
+#states > #disarm {
+	border-color: green;
+}
+#states > #disarm.selected {
+	background-color: green;
+}
+
+#states > #partArm {
+	border-color: orange;
+}
+#states > #partArm.selected {
+	background-color: orange;
+}
+
+#states > #fullArm {
+	border-color: red;
+}
+#states > #fullArm.selected {
+	background-color: red;
+}
