@@ -1,3 +1,7 @@
+body {
+	font-family: sans-serif;
+}
+
 #states {
 	display: flex;
 	flex-direction: row;
@@ -15,7 +19,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-family: sans-serif;
 	color: black;
 }
 #states > button.selected {
@@ -55,4 +58,25 @@
 		rgb(191, 191, 191) 5px,
 		rgb(191, 191, 191) 10px
 	)
+}
+
+.entry {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.title {
+	font-weight: bold;
+}
+
+table, th, td {
+	border: 1px solid lightgrey;
+	border-collapse: collapse;
+}
+
+td {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
 }

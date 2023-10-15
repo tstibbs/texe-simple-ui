@@ -67,11 +67,31 @@ async function setUpButtons(mode) {
 async function fetchInfo() {
 	const {mode, zoneStatuses} = await apiCall('GET', "api/status")
 	document.getElementById('mode').innerHTML = '<span>' + mode + '</span>'
-	document.getElementById('status').innerHTML = zoneStatuses.join('<br />')
+	createTable(document.getElementById('status'), zoneStatuses)
 	const events = await apiCall('GET', "api/events")
-	document.getElementById('events').innerHTML = events.join('<br />')
+	createTable(document.getElementById('events'), events)
 	return  mode
 }
+
+function createTable(parent, tableData) {
+	var table = document.createElement('table')
+	var tableBody = document.createElement('tbody')
+  
+	tableData.forEach((rowData) => {
+	  var row = document.createElement('tr')
+  
+	  rowData.forEach((cellData) => {
+		var cell = document.createElement('td')
+		cell.appendChild(document.createTextNode(cellData))
+		row.appendChild(cell)
+	  })
+  
+	  tableBody.appendChild(row)
+	})
+  
+	table.appendChild(tableBody)
+	parent.appendChild(table)
+  }
 
 async function init() {
 	const mode = await fetchInfo()

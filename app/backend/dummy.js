@@ -3,16 +3,16 @@ export async function getStatus() {
 		mode: 'armed',
 		zoneStatuses:
 			[
-				`zone1: healthy`,
-				`zone2: tamper`
+				[`zone1`, `healthy`],
+				[`zone2`, `tamper`]
 			]
 	}
 }
 
 export async function recentEvents() {
 	return [
-		`datetime: disarmed, thing by person`,
-		`datetime: armed, thing by app`
+		[`datetime`, `disarmed, thing by person`],
+		[`datetime`, `armed, thing by app`]
 	]
 }
 

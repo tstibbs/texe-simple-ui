@@ -118,7 +118,7 @@ async function _getStatus() {
 	} else {
 		mode = areas.map(area => `${area.name}=${area.state}`).join(', ')
 	}
-	const zoneStatuses = zones.filter(zone => zone.name.trim().length > 0).map(zone => `${zone.name}: ${zone.state.join(', ')}`)
+	const zoneStatuses = zones.filter(zone => zone.name.trim().length > 0).map(zone => [zone.name, zone.state.join(', ')])
 	return { mode, zoneStatuses
 	 }
 }
@@ -128,7 +128,13 @@ async function _recentEvents() {
 	const startTime = (Date.now() / 1000) - (24 * 60 * 60) //one day ago
 	const response = await axiosInstance.get(`api/texecom-app/pushlog/list?start=${startTime}&end=0&panel_id=${getStoredVal(PANEL_ID_KEY)}`, extraHeaders())
 	log(response)
-	const events = response.data.map(event => `${event.datetime}: ${event.event_name}, ${event.description} by ${event.user}`)
+	const events = response.data.map(event => {
+		let desc = `${event.event_name}, ${event.description}`
+		if (event.user != null && event.user.length > 0) {
+			desc = `${desc} by ${event.user}`
+		}
+		return [event.datetime, desc]
+	})
 	return events
 }
 
