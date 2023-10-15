@@ -44,18 +44,17 @@ async function setUpButtons(mode) {
 		disarmButton.classList.add('selected')
 		partArmButton.textContent = 'Part Arm'
 		fullArmButton.textContent = 'Full Arm'
-		
+
 		//only enable clicking to arm, not to disarm
-		const click = action => 
-		async () => {
+		const click = action => async () => {
 			document.getElementById('states').classList.add('pending')
 			const response = await apiCall('POST', `api/${action}`)
 			dumpText(response)
 		}
-		
+
 		await pageLoadDelay
-		partArmButton.addEventListener("click", click('partArm'))
-		fullArmButton.addEventListener("click", click('fullArm'))
+		partArmButton.addEventListener('click', click('partArm'))
+		fullArmButton.addEventListener('click', click('fullArm'))
 	} else {
 		dumpText(`Mode not understood: ${mode}`)
 	}
@@ -65,33 +64,33 @@ async function setUpButtons(mode) {
 }
 
 async function fetchInfo() {
-	const {mode, zoneStatuses} = await apiCall('GET', "api/status")
+	const {mode, zoneStatuses} = await apiCall('GET', 'api/status')
 	document.getElementById('mode').innerHTML = '<span>' + mode + '</span>'
 	createTable(document.getElementById('status'), zoneStatuses)
-	const events = await apiCall('GET', "api/events")
+	const events = await apiCall('GET', 'api/events')
 	createTable(document.getElementById('events'), events)
-	return  mode
+	return mode
 }
 
 function createTable(parent, tableData) {
 	var table = document.createElement('table')
 	var tableBody = document.createElement('tbody')
-  
-	tableData.forEach((rowData) => {
-	  var row = document.createElement('tr')
-  
-	  rowData.forEach((cellData) => {
-		var cell = document.createElement('td')
-		cell.appendChild(document.createTextNode(cellData))
-		row.appendChild(cell)
-	  })
-  
-	  tableBody.appendChild(row)
+
+	tableData.forEach(rowData => {
+		var row = document.createElement('tr')
+
+		rowData.forEach(cellData => {
+			var cell = document.createElement('td')
+			cell.appendChild(document.createTextNode(cellData))
+			row.appendChild(cell)
+		})
+
+		tableBody.appendChild(row)
 	})
-  
+
 	table.appendChild(tableBody)
 	parent.appendChild(table)
-  }
+}
 
 async function init() {
 	const mode = await fetchInfo()

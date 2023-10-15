@@ -1,12 +1,12 @@
 import axios from 'axios'
 import {
-	TEXE_USERNAME,
-	TEXE_PASSWORD,
-	TEXE_USER_CODE,
-	TOKEN,
-	PANEL_ID
+	TEXE_USERNAME, //
+	TEXE_PASSWORD, //
+	TEXE_USER_CODE, //
+	TOKEN, //
+	PANEL_ID //
 } from '../envs.js'
-import { getStoredVal, storeVal } from '../store.js'
+import {getStoredVal, storeVal} from '../store.js'
 
 const TOKEN_KEY = 'TOKEN_KEY_for_internal_store'
 const PANEL_ID_KEY = 'PANEL_ID_KEY_for_internal_store'
@@ -15,10 +15,10 @@ storeVal(TOKEN_KEY, TOKEN)
 storeVal(PANEL_ID_KEY, PANEL_ID)
 
 const headers = {
-	'accept': 'application/json',
+	accept: 'application/json',
 	'accept-encoding': 'gzip',
-	'connection': 'Keep-Alive',
-	'host': 'cloud.texe.com',
+	connection: 'Keep-Alive',
+	host: 'cloud.texe.com',
 	'user-agent': 'okhttp/4.9.2',
 	'content-type': 'application/json'
 }
@@ -28,8 +28,8 @@ const axiosInstance = axios.create({
 	headers
 })
 axiosInstance.interceptors.response.use(res => {
-	if (res.data?.response === 'error') { 
-		if(res.data?.details?.login_required === true) {
+	if (res.data?.response === 'error') {
+		if (res.data?.details?.login_required === true) {
 			res.status = 403
 		} else {
 			res.status = 555 //some kind of error
@@ -42,23 +42,21 @@ axiosInstance.interceptors.response.use(res => {
 	}
 })
 
-const extraHeaders = () => ({ headers: { 'token': getStoredVal(TOKEN_KEY) } })
+const extraHeaders = () => ({headers: {token: getStoredVal(TOKEN_KEY)}})
 
 const log = response => console.log(`${response.status} - ${JSON.stringify(response.data, null, 2).substring(0, 200)}`)
 
 async function login() {
 	console.log('login')
-	let response = await axiosInstance.post('token/',
-		{
-			"username": TEXE_USERNAME,
-			"password": TEXE_PASSWORD,
-			"app": "texecom",
-			"push_token": null,
-			"use_sound_channels": true,
-			"device_token": null,
-			"device_locale": "en-US"
-		}
-	)
+	let response = await axiosInstance.post('token/', {
+		username: TEXE_USERNAME,
+		password: TEXE_PASSWORD,
+		app: 'texecom',
+		push_token: null,
+		use_sound_channels: true,
+		device_token: null,
+		device_locale: 'en-US'
+	})
 	log(response)
 	if (response.data.token != null) {
 		console.log(`token: ${response.data.token}`)
@@ -73,11 +71,13 @@ async function login() {
 	log(response)
 
 	console.log('set code')
-	response = await axiosInstance.post('api/texecom-app/site/setcode',
+	response = await axiosInstance.post(
+		'api/texecom-app/site/setcode',
 		{
-			"panel_id": getStoredVal(PANEL_ID_KEY),
-			"panel_user_code": TEXE_USER_CODE
-		}, extraHeaders()
+			panel_id: getStoredVal(PANEL_ID_KEY),
+			panel_user_code: TEXE_USER_CODE
+		},
+		extraHeaders()
 	)
 	log(response)
 }
@@ -106,9 +106,12 @@ function authWrap(delegate) {
 
 async function _getStatus() {
 	console.log('status')
-	let response = await axiosInstance.get(`api/texecom-app/site/status?request_mask=1&panel_id=${getStoredVal(PANEL_ID_KEY)}`, extraHeaders())
+	let response = await axiosInstance.get(
+		`api/texecom-app/site/status?request_mask=1&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
+		extraHeaders()
+	)
 	log(response)
-	let { zones, areas } = response.data
+	let {zones, areas} = response.data
 	areas = areas.filter(area => area.name.trim().length > 0)
 	let mode = null
 	if (areas.length == 0) {
@@ -119,14 +122,16 @@ async function _getStatus() {
 		mode = areas.map(area => `${area.name}=${area.state}`).join(', ')
 	}
 	const zoneStatuses = zones.filter(zone => zone.name.trim().length > 0).map(zone => [zone.name, zone.state.join(', ')])
-	return { mode, zoneStatuses
-	 }
+	return {mode, zoneStatuses}
 }
 
 async function _recentEvents() {
 	console.log('recentEvents')
-	const startTime = (Date.now() / 1000) - (24 * 60 * 60) //one day ago
-	const response = await axiosInstance.get(`api/texecom-app/pushlog/list?start=${startTime}&end=0&panel_id=${getStoredVal(PANEL_ID_KEY)}`, extraHeaders())
+	const startTime = Date.now() / 1000 - 24 * 60 * 60 //one day ago
+	const response = await axiosInstance.get(
+		`api/texecom-app/pushlog/list?start=${startTime}&end=0&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
+		extraHeaders()
+	)
 	log(response)
 	const events = response.data.map(event => {
 		let desc = `${event.event_name}, ${event.description}`
@@ -146,7 +151,10 @@ async function genericArm(url) {
 
 async function _partArm() {
 	console.log('partArm')
-	return genericArm(`api/texecom-app/partarmarea?option=1&area=1&panel_id=${getStoredVal(PANEL_ID_KEY)}`, extraHeaders())
+	return genericArm(
+		`api/texecom-app/partarmarea?option=1&area=1&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
+		extraHeaders()
+	)
 }
 
 async function _fullArm() {

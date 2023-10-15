@@ -1,11 +1,10 @@
 export async function getStatus() {
 	return {
 		mode: 'armed',
-		zoneStatuses:
-			[
-				[`zone1`, `healthy`],
-				[`zone2`, `tamper`]
-			]
+		zoneStatuses: [
+			[`zone1`, `healthy`],
+			[`zone2`, `tamper`]
+		]
 	}
 }
 

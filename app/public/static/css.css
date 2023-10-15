@@ -24,7 +24,8 @@ body {
 #states > button.selected {
 	color: white;
 }
-#states > button.selected.pending, #states.pending > button {
+#states > button.selected.pending,
+#states.pending > button {
 	color: black;
 }
 
@@ -49,7 +50,8 @@ body {
 	background-color: red;
 }
 
-#states.pending > button, button.pending {
+#states.pending > button,
+button.pending {
 	background-color: grey !important;
 	background: repeating-linear-gradient(
 		45deg,
@@ -57,7 +59,7 @@ body {
 		rgb(231, 231, 231) 5px,
 		rgb(191, 191, 191) 5px,
 		rgb(191, 191, 191) 10px
-	)
+	);
 }
 
 .entry {
@@ -69,7 +71,9 @@ body {
 	font-weight: bold;
 }
 
-table, th, td {
+table,
+th,
+td {
 	border: 1px solid lightgrey;
 	border-collapse: collapse;
 }
