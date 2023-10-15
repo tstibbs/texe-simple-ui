@@ -1,0 +1,17 @@
+{
+	"name": "@tstibbs/texe-simple-ui-root",
+	"private": true,
+	"engines": {
+		"node": ">=20",
+		"npm": ">=10"
+	},
+	"type": "module",
+	"devDependencies": {
+		"husky": "^8.0.3",
+		"lint-staged": "^15.0.1",
+		"prettier": "^3.0.3"
+	},
+	"scripts": {
+		"prepare": "husky install"
+	}
+}
