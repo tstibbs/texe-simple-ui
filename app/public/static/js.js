@@ -1,3 +1,7 @@
+const pageLoadDelay = new Promise(resolve => {
+	setTimeout(resolve, 1000) //wait 1 second before enabling buttons, to prevent accidental click
+})
+
 async function apiCall(method, url) {
 	try {
 		const response = await fetch(url, {
@@ -19,34 +23,45 @@ function dumpText(text) {
 	document.body.appendChild(div)
 }
 
-function setUpButtons(mode) {
+async function setUpButtons(mode) {
 	const disarmButton = document.getElementById('disarm')
 	const partArmButton = document.getElementById('partArm')
 	const fullArmButton = document.getElementById('fullArm')
-	if (mode == 'disarmed') {
-		disarmButton.textContent = 'Disarmed'
-		disarmButton.classList.add('selected')
-		partArmButton.textContent = 'Part Arm'
-		fullArmButton.textContent = 'Full Arm'
-	} else if (mode == 'partArmed') {
+	if (mode == 'partarmed') {
 		partArmButton.textContent = 'Part Armed'
 		partArmButton.classList.add('selected')
 	} else if (mode == 'armed') {
 		fullArmButton.textContent = 'Full Armed'
 		fullArmButton.classList.add('selected')
+	} else if (mode == 'partarming') {
+		partArmButton.textContent = 'Part Arming'
+		partArmButton.classList.add('selected', 'pending')
+	} else if (mode == 'arming') {
+		fullArmButton.textContent = 'Arming'
+		fullArmButton.classList.add('selected', 'pending')
+	} else if (mode == 'disarmed') {
+		disarmButton.textContent = 'Disarmed'
+		disarmButton.classList.add('selected')
+		partArmButton.textContent = 'Part Arm'
+		fullArmButton.textContent = 'Full Arm'
+		
+		//only enable clicking to arm, not to disarm
+		const click = action => 
+		async () => {
+			document.getElementById('states').classList.add('pending')
+			const response = await apiCall('POST', `api/${action}`)
+			dumpText(response)
+		}
+		
+		await pageLoadDelay
+		partArmButton.addEventListener("click", click('partArm'))
+		fullArmButton.addEventListener("click", click('fullArm'))
 	} else {
 		dumpText(`Mode not understood: ${mode}`)
 	}
 
-	partArmButton.addEventListener("click", async () => {
-        const response = await apiCall('POST', "api/partArm")
-		dumpText(response)
- 	});
-	 fullArmButton.addEventListener("click", async () => {
-		const response = await apiCall('POST', "api/fullArm")
-		dumpText(response)
-	});
-	document.getElementById('states').classList.add('show')
+	await pageLoadDelay
+	document.getElementById('states').classList.remove('pending')
 }
 
 async function fetchInfo() {
@@ -60,7 +75,7 @@ async function fetchInfo() {
 
 async function init() {
 	const mode = await fetchInfo()
-	setUpButtons(mode)
+	await setUpButtons(mode)
 }
 
 init()

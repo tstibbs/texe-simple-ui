@@ -2,10 +2,6 @@
 	display: flex;
 	flex-direction: row;
 	align-items: centre;
-	visibility: hidden;
-}
-#states.show {
-	visibility: initial;
 }
 
 #states > button {
@@ -24,6 +20,9 @@
 }
 #states > button.selected {
 	color: white;
+}
+#states > button.selected.pending, #states.pending > button {
+	color: black;
 }
 
 #states > #disarm {
@@ -45,4 +44,15 @@
 }
 #states > #fullArm.selected {
 	background-color: red;
+}
+
+#states.pending > button, button.pending {
+	background-color: grey !important;
+	background: repeating-linear-gradient(
+		45deg,
+		rgb(231, 231, 231),
+		rgb(231, 231, 231) 5px,
+		rgb(191, 191, 191) 5px,
+		rgb(191, 191, 191) 10px
+	)
 }
