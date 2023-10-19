@@ -92,7 +92,7 @@ function authWrap(delegate) {
 				try {
 					await login()
 					//now try again
-					await delegate()
+					return await delegate()
 				} catch (e) {
 					console.error(e.stack)
 					res.sendStatus(e.response?.status || 418)
