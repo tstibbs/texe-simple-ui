@@ -67,7 +67,8 @@ async function fetchInfo() {
 	const {mode, zoneStatuses} = await apiCall('GET', 'api/status')
 	document.getElementById('mode').innerHTML = '<span>' + mode + '</span>'
 	createTable(document.getElementById('status'), zoneStatuses)
-	const events = await apiCall('GET', 'api/events')
+	let events = await apiCall('GET', 'api/events')
+	events = events.map(([date, text]) => [new Date(date).toLocaleString(), text])
 	createTable(document.getElementById('events'), events)
 	return mode
 }

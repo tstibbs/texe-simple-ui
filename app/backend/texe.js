@@ -7,6 +7,7 @@ import {
 	PANEL_ID //
 } from '../envs.js'
 import {getStoredVal, storeVal} from '../store.js'
+import {convertDate} from './texe-to-js-converter.js'
 
 const TOKEN_KEY = 'TOKEN_KEY_for_internal_store'
 const PANEL_ID_KEY = 'PANEL_ID_KEY_for_internal_store'
@@ -121,7 +122,15 @@ async function _getStatus() {
 	} else {
 		mode = areas.map(area => `${area.name}=${area.state}`).join(', ')
 	}
-	const zoneStatuses = zones.filter(zone => zone.name.trim().length > 0).map(zone => [zone.name, zone.state.join(', ')])
+	const zoneStatuses = zones
+		.filter(zone => zone.name.trim().length > 0)
+		.map(zone => {
+			let {name} = zone
+			if (/^Zone \d+$/.test(name)) {
+				name = `${name} (${zone.device})`
+			}
+			return [name, zone.state.join(', ')]
+		})
 	return {mode, zoneStatuses}
 }
 
@@ -132,14 +141,22 @@ async function _recentEvents() {
 		`api/texecom-app/pushlog/list?start=${startTime}&end=0&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
 		extraHeaders()
 	)
-	log(response)
-	const events = response.data.map(event => {
-		let desc = `${event.event_name}, ${event.description}`
-		if (event.user != null && event.user.length > 0) {
-			desc = `${desc} by ${event.user}`
-		}
-		return [event.datetime, desc]
-	})
+	console.log(JSON.stringify(response.data, null, 2))
+	let events = null
+	try {
+		events = response.data
+			.map(event => {
+				let desc = `${event.event_name}, ${event.description}`
+				if (event.user != null && event.user.length > 0) {
+					desc = `${desc} by ${event.user}`
+				}
+				return [convertDate(event.datetime), desc]
+			})
+			.sort((a, b) => b[0] - a[0])
+	} catch (e) {
+		console.log(JSON.stringify(response.data, null, 2))
+		console.error(e)
+	}
 	return events
 }
 
