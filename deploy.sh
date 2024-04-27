@@ -10,7 +10,6 @@ fi
 
 ssh $device mkdir -p ~/workspace/texecom-simple-ui/app
 scp -r app/*.js* app/backend app/public $device:~/workspace/texecom-simple-ui/app
-scp -r $device:~/workspace/texecom-simple-ui/app/
 scp -r Dockerfile docker-compose.yml $device:~/workspace/texecom-simple-ui/
 echo "=================="
 echo "Run the following:"
