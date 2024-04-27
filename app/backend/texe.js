@@ -111,7 +111,7 @@ async function _getStatus() {
 		`api/texecom-app/site/status?request_mask=1&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
 		extraHeaders()
 	)
-	log(response)
+	console.log(JSON.stringify(response.data, null, 2))
 	let {zones, areas} = response.data
 	areas = areas.filter(area => area.name.trim().length > 0)
 	let mode = null
