@@ -20,4 +20,4 @@ services:
 networks:
   shared-private:
     external: true
-    name: shared_shared-private
+    name: core-local-infra_shared-private
