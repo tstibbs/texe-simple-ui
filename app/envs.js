@@ -5,7 +5,5 @@ export const {
 	TEXE_PASSWORD, //
 	TEXE_USER_CODE, //
 	TOKEN, //
-	PANEL_ID, //
-	LOCAL_AUTH_USERNAME, //
-	LOCAL_AUTH_PASSWORD //
+	PANEL_ID //
 } = process.env

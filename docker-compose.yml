@@ -2,11 +2,10 @@ version: '3.7'
 
 services:
   app:
+    hostname: texecom-simple-ui
     image: 'texecom-simple-ui:latest'
     build: .
     restart: unless-stopped
-    ports:
-      - '8080:3000'
     environment:
       - TEXE_USERNAME
       - TEXE_PASSWORD
@@ -14,5 +13,11 @@ services:
       - DUMMY_DATA
       - TOKEN
       - PANEL_ID
-      - LOCAL_AUTH_USERNAME
-      - LOCAL_AUTH_PASSWORD
+    networks:
+      - shared-private
+      - default
+
+networks:
+  shared-private:
+    external: true
+    name: shared_shared-private
