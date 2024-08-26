@@ -64,9 +64,10 @@ async function setUpButtons(mode) {
 }
 
 async function fetchInfo() {
-	const {mode, zoneStatuses} = await apiCall('GET', 'api/status')
+	const {mode, zoneStatuses, lastUpdated} = await apiCall('GET', 'api/status')
 	document.getElementById('mode').innerHTML = '<span>' + mode + '</span>'
-	createTable(document.getElementById('status'), zoneStatuses)
+	let statusData = [[`Last Updated`, lastUpdated]].concat(zoneStatuses)
+	createTable(document.getElementById('status'), statusData)
 	let events = await apiCall('GET', 'api/events')
 	events = events.map(([date, text]) => [new Date(date).toLocaleString(), text])
 	createTable(document.getElementById('events'), events)

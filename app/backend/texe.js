@@ -112,7 +112,7 @@ async function _getStatus() {
 		extraHeaders()
 	)
 	console.log(JSON.stringify(response.data, null, 2))
-	let {zones, areas} = response.data
+	let {zones, areas, last_updated: lastUpdated} = response.data
 	areas = areas.filter(area => area.name.trim().length > 0)
 	let mode = null
 	if (areas.length == 0) {
@@ -131,7 +131,7 @@ async function _getStatus() {
 			}
 			return [name, zone.state.join(', ')]
 		})
-	return {mode, zoneStatuses}
+	return {mode, zoneStatuses, lastUpdated}
 }
 
 async function _recentEvents() {

@@ -4,7 +4,8 @@ export async function getStatus() {
 		zoneStatuses: [
 			[`zone1`, `healthy`],
 			[`zone2`, `tamper`]
-		]
+		],
+		lastUpdated: '21/2/2025 18:99pm'
 	}
 }
 
