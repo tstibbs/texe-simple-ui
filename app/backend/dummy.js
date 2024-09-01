@@ -5,14 +5,14 @@ export async function getStatus() {
 			[`zone1`, `healthy`],
 			[`zone2`, `tamper`]
 		],
-		lastUpdated: '21/2/2025 18:99pm'
+		lastUpdated: 1727733458
 	}
 }
 
 export async function recentEvents() {
 	return [
-		[`datetime`, `disarmed, thing by person`],
-		[`datetime`, `armed, thing by app`]
+		[1730325458, `disarmed, thing by person`],
+		[1733003858, `armed, thing by app`]
 	]
 }
 

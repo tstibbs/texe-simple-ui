@@ -66,12 +66,26 @@ async function setUpButtons(mode) {
 async function fetchInfo() {
 	const {mode, zoneStatuses, lastUpdated} = await apiCall('GET', 'api/status')
 	document.getElementById('mode').innerHTML = '<span>' + mode + '</span>'
-	let statusData = [[`Last Updated`, lastUpdated]].concat(zoneStatuses)
+	let statusData = [[`Last Updated`, parseDate(lastUpdated)]].concat(zoneStatuses)
 	createTable(document.getElementById('status'), statusData)
 	let events = await apiCall('GET', 'api/events')
-	events = events.map(([date, text]) => [new Date(date).toLocaleString(), text])
+	events = events.map(([date, text]) => [parseDate(date), text])
 	createTable(document.getElementById('events'), events)
 	return mode
+}
+
+function parseDate(input) {
+	try {
+		if (Number.isInteger(input) && input > 1704067200 && input < 5000000000) {
+			const date = new Date(input * 1000)
+			return date.toLocaleString()
+		} else {
+			return input
+		}
+	} catch (e) {
+		console.error(e)
+		return input
+	}
 }
 
 function createTable(parent, tableData) {

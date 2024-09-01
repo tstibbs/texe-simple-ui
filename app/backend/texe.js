@@ -7,7 +7,6 @@ import {
 	PANEL_ID //
 } from '../envs.js'
 import {getStoredVal, storeVal} from '../store.js'
-import {convertDate} from './texe-to-js-converter.js'
 
 const TOKEN_KEY = 'TOKEN_KEY_for_internal_store'
 const PANEL_ID_KEY = 'PANEL_ID_KEY_for_internal_store'
@@ -150,7 +149,7 @@ async function _recentEvents() {
 				if (event.user != null && event.user.length > 0) {
 					desc = `${desc} by ${event.user}`
 				}
-				return [convertDate(event.datetime), desc]
+				return [event.timestamp, desc]
 			})
 			.sort((a, b) => b[0] - a[0])
 	} catch (e) {
