@@ -10,6 +10,7 @@ import {getStoredVal, storeVal} from '../store.js'
 
 const TOKEN_KEY = 'TOKEN_KEY_for_internal_store'
 const PANEL_ID_KEY = 'PANEL_ID_KEY_for_internal_store'
+const TWO_MINUTES = 2 * 60 * 1000
 
 storeVal(TOKEN_KEY, TOKEN)
 storeVal(PANEL_ID_KEY, PANEL_ID)
@@ -106,12 +107,21 @@ function authWrap(delegate) {
 
 async function _getStatus() {
 	console.log('status')
-	let response = await axiosInstance.get(
-		`api/texecom-app/site/status?request_mask=1&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
-		extraHeaders()
-	)
-	console.log(JSON.stringify(response.data, null, 2))
-	let {zones, areas, last_updated: lastUpdated} = response.data
+	const fetchStatus = async () => {
+		let response = await axiosInstance.get(
+			`api/texecom-app/site/status?request_mask=1&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
+			extraHeaders()
+		)
+		console.log(JSON.stringify(response.data, null, 2))
+		return response.data
+	}
+	let data = await fetchStatus()
+	//if not updated recently, try again (but only try once)
+	if (Date.now() - data.last_updated * 1000 > TWO_MINUTES) {
+		console.log('trying status call again')
+		data = await fetchStatus()
+	}
+	let {zones, areas, last_updated: lastUpdated} = data
 	areas = areas.filter(area => area.name.trim().length > 0)
 	let mode = null
 	if (areas.length == 0) {
