@@ -45,7 +45,7 @@ axiosInstance.interceptors.response.use(res => {
 
 const extraHeaders = () => ({headers: {token: getStoredVal(TOKEN_KEY)}})
 
-const log = response => console.log(`${response.status} - ${JSON.stringify(response.data, null, 2).substring(0, 200)}`)
+const log = response => console.log(`${response.status} - ${JSON.stringify(response.data)}`)
 
 async function login() {
 	console.log('login')
@@ -112,7 +112,7 @@ async function _getStatus() {
 			`api/texecom-app/site/status?request_mask=1&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
 			extraHeaders()
 		)
-		console.log(JSON.stringify(response.data, null, 2))
+		log(response)
 		return response.data
 	}
 	let data = await fetchStatus()
@@ -150,7 +150,7 @@ async function _recentEvents() {
 		`api/texecom-app/pushlog/list?start=${startTime}&end=0&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
 		extraHeaders()
 	)
-	console.log(JSON.stringify(response.data, null, 2))
+	log(response)
 	let events = null
 	try {
 		events = response.data
@@ -163,7 +163,7 @@ async function _recentEvents() {
 			})
 			.sort((a, b) => b[0] - a[0])
 	} catch (e) {
-		console.log(JSON.stringify(response.data, null, 2))
+		log(response)
 		console.error(e)
 	}
 	return events
