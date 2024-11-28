@@ -1,3 +1,6 @@
+import {promisify} from 'node:util'
+const sleep = promisify(setTimeout)
+
 import axios from 'axios'
 import {
 	TEXE_USERNAME, //
@@ -118,6 +121,7 @@ async function _getStatus() {
 	let data = await fetchStatus()
 	//if not updated recently, try again (but only try once)
 	if (Date.now() - data.last_updated * 1000 > TWO_MINUTES) {
+		await sleep(1000)
 		console.log('trying status call again')
 		data = await fetchStatus()
 	}
