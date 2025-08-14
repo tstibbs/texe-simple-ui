@@ -1,4 +1,7 @@
 import {promisify} from 'node:util'
+
+import {backOff} from 'exponential-backoff'
+
 const sleep = promisify(setTimeout)
 
 import axios from 'axios'
@@ -110,21 +113,34 @@ function authWrap(delegate) {
 
 async function _getStatus() {
 	console.log('status')
-	const fetchStatus = async () => {
+	const fetchStatus = async requestTime => {
 		let response = await axiosInstance.get(
 			`api/texecom-app/site/status?request_mask=1&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
 			extraHeaders()
 		)
+		let lastUpdatedTs = response.data.last_updated * 1000
+		if (lastUpdatedTs < requestTime) {
+			let errorMessage = `${new Date(lastUpdatedTs)} < ${new Date(requestTime)}`
+			console.error(errorMessage)
+			throw new Error(errorMessage)
+		}
 		log(response)
 		return response.data
 	}
-	let data = await fetchStatus()
-	//if not updated recently, try again (but only try once)
-	if (Date.now() - data.last_updated * 1000 > TWO_MINUTES) {
-		await sleep(1000)
-		console.log('trying status call again')
-		data = await fetchStatus()
+	const requestTime = Date.now()
+	let data = null
+	try {
+		data = await fetchStatus(requestTime)
+	} catch (e) {
+		//retry quickly after the first failed attempt, but then retry slower after that
+		await sleep(100)
+		data = await backOff(() => fetchStatus(requestTime), {
+			startingDelay: 500,
+			maxDelay: 3000,
+			numOfAttempts: 6
+		})
 	}
+
 	let {zones, areas, last_updated: lastUpdated} = data
 	areas = areas.filter(area => area.name.trim().length > 0)
 	let mode = null
