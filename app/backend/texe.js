@@ -16,7 +16,7 @@ import {getStoredVal, storeVal} from '../store.js'
 
 const TOKEN_KEY = 'TOKEN_KEY_for_internal_store'
 const PANEL_ID_KEY = 'PANEL_ID_KEY_for_internal_store'
-const TWO_MINUTES = 2 * 60 * 1000
+const STATUS_GRACE_PERIOD = 5 * 1000 //if the request is from the last 5 seconds, it's good enough - this prevents issues with misaligned clocks
 
 storeVal(TOKEN_KEY, TOKEN)
 storeVal(PANEL_ID_KEY, PANEL_ID)
@@ -119,10 +119,18 @@ async function _getStatus() {
 			extraHeaders()
 		)
 		let lastUpdatedTs = response.data.last_updated * 1000
-		if (lastUpdatedTs < requestTime) {
-			let errorMessage = `${new Date(lastUpdatedTs)} < ${new Date(requestTime)}`
+		if (lastUpdatedTs < requestTime - STATUS_GRACE_PERIOD) {
+			let errorMessage = `Status request not recent enough: ${new Date(lastUpdatedTs).toISOString()} < ${new Date(
+				requestTime
+			).toISOString()}`
 			console.error(errorMessage)
 			throw new Error(errorMessage)
+		} else {
+			console.log(
+				`Status request recent enough: ${new Date(lastUpdatedTs).toISOString()} < ${new Date(
+					requestTime
+				).toISOString()}`
+			)
 		}
 		log(response)
 		return response.data
