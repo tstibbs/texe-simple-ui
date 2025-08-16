@@ -16,7 +16,7 @@ echo "Run the following:"
 echo "cd ~/workspace/texecom-simple-ui/"
 echo "docker tag \$(docker compose images -q app) texecom-simple-ui:last-working"
 echo "export commit=$gitCommit && docker compose build"
-echo "(optional) vim .env"
+echo "# (optional) vim .env"
 echo "docker compose down && docker compose up -d && docker compose logs --follow --timestamps"
 echo "=================="
 ssh $device
