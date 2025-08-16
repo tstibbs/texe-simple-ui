@@ -5,7 +5,12 @@ export async function getStatus() {
 			[`zone1`, `healthy`],
 			[`zone2`, `tamper`]
 		],
-		lastUpdated: 1727733458
+		lastUpdated: 1727733458,
+		metadata: [
+			'Status request not recent enough: 2025-01-02T03:04:05.678Z < 2025-01-02T03:04:05.678Z - 5000',
+			'Status request not recent enough: 2025-01-02T03:04:05.678Z < 2025-01-02T03:04:05.678Z - 5000',
+			'Status request recent enough: 2025-01-02T03:04:05.678Z >= 2025-01-02T03:04:05.678Z - 5000'
+		]
 	}
 }
 

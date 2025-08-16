@@ -1,4 +1,5 @@
 import {promisify} from 'node:util'
+import {performance} from 'node:perf_hooks'
 
 import {backOff} from 'exponential-backoff'
 
@@ -113,24 +114,28 @@ function authWrap(delegate) {
 
 async function _getStatus() {
 	console.log('status')
+	let metadata = []
 	const fetchStatus = async requestTime => {
+		let start = performance.now()
 		let response = await axiosInstance.get(
 			`api/texecom-app/site/status?request_mask=1&panel_id=${getStoredVal(PANEL_ID_KEY)}`,
 			extraHeaders()
 		)
+		let end = performance.now()
 		let lastUpdatedTs = response.data.last_updated * 1000
 		if (lastUpdatedTs < requestTime - STATUS_GRACE_PERIOD) {
-			let errorMessage = `Status request not recent enough: ${new Date(lastUpdatedTs).toISOString()} < ${new Date(
+			let statusMessage = `Status request not recent enough: ${new Date(lastUpdatedTs).toISOString()} < ${new Date(
 				requestTime
-			).toISOString()}`
-			console.error(errorMessage)
-			throw new Error(errorMessage)
+			).toISOString()} - ${STATUS_GRACE_PERIOD} (request time: ${Math.round(end - start)}ms)`
+			console.error(statusMessage)
+			metadata.push(statusMessage)
+			throw new Error(statusMessage)
 		} else {
-			console.log(
-				`Status request recent enough: ${new Date(lastUpdatedTs).toISOString()} < ${new Date(
-					requestTime
-				).toISOString()}`
-			)
+			let statusMessage = `Status request recent enough: ${new Date(lastUpdatedTs).toISOString()} >= ${new Date(
+				requestTime
+			).toISOString()} - ${STATUS_GRACE_PERIOD} (request time: ${Math.round(end - start)}ms)`
+			metadata.push(statusMessage)
+			console.log(statusMessage)
 		}
 		log(response)
 		return response.data
@@ -168,7 +173,7 @@ async function _getStatus() {
 			}
 			return [name, zone.state.join(', ')]
 		})
-	return {mode, zoneStatuses, lastUpdated}
+	return {mode, zoneStatuses, lastUpdated, metadata}
 }
 
 async function _recentEvents() {
