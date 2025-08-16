@@ -1,6 +1,6 @@
 import express from 'express'
 import nocache from 'nocache'
-import {getStatus, recentEvents, partArm, fullArm} from './backend-switcher.js'
+import {getStatus, recentEvents, partArm, validatedPartArm, validatedFullArm, fullArm} from './backend.js'
 
 const apiRouter = express.Router()
 const app = express()
@@ -30,6 +30,16 @@ apiRouter.post('/partArm', async (req, res) => {
 
 apiRouter.post('/fullArm', async (req, res) => {
 	const response = await fullArm(res)
+	res.json(response)
+})
+
+apiRouter.post('/validated/partArm', async (req, res) => {
+	const response = await validatedPartArm(res)
+	res.json(response)
+})
+
+apiRouter.post('/validated/fullArm', async (req, res) => {
+	const response = await validatedFullArm(res)
 	res.json(response)
 })
 
