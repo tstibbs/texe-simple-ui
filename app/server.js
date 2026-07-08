@@ -2,6 +2,8 @@ import express from 'express'
 import nocache from 'nocache'
 import {getStatus, recentEvents, partArm, validatedPartArm, validatedFullArm, fullArm} from './backend.js'
 
+const port = 3000
+
 const apiRouter = express.Router()
 const app = express()
 
@@ -43,6 +45,6 @@ apiRouter.post('/validated/fullArm', async (req, res) => {
 	res.json(response)
 })
 
-app.listen(3000, () => {
-	console.log(`Running...`)
+app.listen(port, () => {
+	console.log(`Running on port ${port} ...`)
 })
