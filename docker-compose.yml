@@ -1,7 +1,7 @@
 services:
   app:
     hostname: texecom-simple-ui
-    image: 'texecom-simple-ui:latest'
+    image: 'texecom-simple-ui:latest' # must match project name
     build: .
     restart: unless-stopped
     environment:

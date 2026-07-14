@@ -2,21 +2,17 @@
 
 set -euo pipefail
 
-gitCommit=$(git rev-parse HEAD)
-if [ -n "$(git status -s)" ]
-then
-	gitCommit="$gitCommit+"
-fi
+working_dir="~/workspace/texecom-simple-ui"
 
-ssh $device mkdir -p ~/workspace/texecom-simple-ui/app
-ssh $device rm -r ~/workspace/texecom-simple-ui/app/*
-scp -r app/*.js* app/pnpm-*.yaml app/backend app/public $device:~/workspace/texecom-simple-ui/app
-scp -r Dockerfile docker-compose.yml $device:~/workspace/texecom-simple-ui/
+# first tag old version before we make any changes
+ssh "$device" "cd $working_dir && docker tag \$(docker compose images -q app) texecom-simple-ui:last-working"
+
+# now deploy new code and image
+pnpm run docker:deploy
+scp docker-compose.yml $device:$working_dir/
 echo "=================="
 echo "Run the following:"
-echo "cd ~/workspace/texecom-simple-ui/"
-echo "docker tag \$(docker compose images -q app) texecom-simple-ui:last-working"
-echo "export commit=$gitCommit && docker compose build"
+echo "cd $working_dir/"
 echo "# (optional) vim .env"
 echo "docker compose down && docker compose up -d && docker compose logs --follow --timestamps"
 echo "=================="

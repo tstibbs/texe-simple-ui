@@ -1,8 +1,7 @@
-FROM node:24-bookworm-slim
+FROM cloud-core-base-image:build
 
-RUN npm -g install pnpm@11.8
-
-WORKDIR /usr/src/app
+COPY mise.toml ./
+RUN mise install
 
 # do this before copying in any application files, to allow more rapid rebuilding if the app code is changing without any dependency changes
 COPY app/package*.json ./
