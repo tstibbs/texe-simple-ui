@@ -21,7 +21,7 @@
 		"prettier": "^3.9.4"
 	},
 	"scripts": {
-		"prepare": "husky install",
+		"prepare": "husky .config/husky",
 		"docker:build": "cloud-core-base-image build",
 		"docker:deploy": "cloud-core-base-image deploy --server $device"
 	}
