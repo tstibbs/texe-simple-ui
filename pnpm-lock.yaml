@@ -209,7 +209,7 @@ importers:
     devDependencies:
       '@tstibbs/cloud-core-base-image':
         specifier: github:tstibbs/cloud-core#path:/edge/docker-base-image
-        version: https://codeload.github.com/tstibbs/cloud-core/tar.gz/9e10abcbb29ca95d3673f96c882412680b1668fc#path:/edge/docker-base-image
+        version: https://codeload.github.com/tstibbs/cloud-core/tar.gz/94991af97f09b240e298cab700a701e34aafb4f8#path:/edge/docker-base-image
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -222,8 +222,8 @@ importers:
 
 packages:
 
-  '@tstibbs/cloud-core-base-image@https://codeload.github.com/tstibbs/cloud-core/tar.gz/9e10abcbb29ca95d3673f96c882412680b1668fc#path:/edge/docker-base-image':
-    resolution: {gitHosted: true, integrity: sha512-qHjNrrYXYcDAfPPF7Bi2Zc8YeXjvsiLAZhrVlJ4mbd+Y6mXcAu2I1AgW6XNGxeavtD1nw4MLDZge+Vl20ygHfQ==, path: /edge/docker-base-image, tarball: https://codeload.github.com/tstibbs/cloud-core/tar.gz/9e10abcbb29ca95d3673f96c882412680b1668fc}
+  '@tstibbs/cloud-core-base-image@https://codeload.github.com/tstibbs/cloud-core/tar.gz/94991af97f09b240e298cab700a701e34aafb4f8#path:/edge/docker-base-image':
+    resolution: {gitHosted: true, path: /edge/docker-base-image, tarball: https://codeload.github.com/tstibbs/cloud-core/tar.gz/94991af97f09b240e298cab700a701e34aafb4f8}
     version: 0.0.0
     engines: {node: '>=20', npm: '>=10'}
     hasBin: true
@@ -359,7 +359,7 @@ packages:
 
 snapshots:
 
-  '@tstibbs/cloud-core-base-image@https://codeload.github.com/tstibbs/cloud-core/tar.gz/9e10abcbb29ca95d3673f96c882412680b1668fc#path:/edge/docker-base-image':
+  '@tstibbs/cloud-core-base-image@https://codeload.github.com/tstibbs/cloud-core/tar.gz/94991af97f09b240e298cab700a701e34aafb4f8#path:/edge/docker-base-image':
     dependencies:
       commander: 15.0.0
 
