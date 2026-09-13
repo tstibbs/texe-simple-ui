@@ -4,6 +4,7 @@ set -euo pipefail
 
 working_dir="~/workspace/texecom-simple-ui"
 
+ssh $device mkdir -p "$working_dir"
 # first tag old version before we make any changes
 ssh "$device" "cd $working_dir && docker tag \$(docker compose images -q app) texecom-simple-ui:last-working"
 
